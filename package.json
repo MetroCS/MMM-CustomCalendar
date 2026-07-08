@@ -13,9 +13,13 @@
     "calendar"
   ],
   "license": "MIT",
+  "imports": {
+    "#http_fetcher": "./vendor/http_fetcher.js"
+  },
   "dependencies": {
     "moment-timezone": "^0.6.2",
-    "node-ical": "^0.26.1"
+    "node-ical": "^0.26.1",
+    "undici": "^8.5.0"
   },
   "engines": {
     "node": ">=18"
