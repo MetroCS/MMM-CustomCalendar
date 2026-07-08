@@ -1,0 +1,23 @@
+{
+  "name": "MMM-CustomCalendar",
+  "version": "1.0.0",
+  "description": "A MagicMirror calendar module, derived from the default calendar module, with per-instance and per-calendar formatting controls (font sizes, line height, spacing) configurable in config.js.",
+  "main": "MMM-CustomCalendar.js",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "magicmirror",
+    "MagicMirror",
+    "MMM",
+    "calendar"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "moment-timezone": "^0.6.2",
+    "node-ical": "^0.26.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

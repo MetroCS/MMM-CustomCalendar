@@ -1,0 +1,29 @@
+/*
+ * MMM-CustomCalendar
+ *
+ * Base styles for the module. Note: MagicMirror assigns the wrapper element's
+ * CSS class to the exact module name it was registered under, so these
+ * selectors target `.MMM-CustomCalendar` rather than the original `.calendar`
+ * used by the stock module.
+ *
+ * All of the sizing/spacing values below are only fallback defaults for when
+ * nothing has been configured. Setting fontSize, titleFontSize, timeFontSize,
+ * symbolFontSize, lineHeight, symbolTitleSpace, or titleDateSpace in your
+ * config (instance-level or per-calendar) applies inline and overrides these.
+ */
+
+.MMM-CustomCalendar .symbol {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.MMM-CustomCalendar .title {
+  padding: 0 10px;
+}
+
+.MMM-CustomCalendar .time {
+  padding-left: 20px;
+  text-align: right;
+}
