@@ -53,7 +53,7 @@ Every configuration option from the stock `calendar` module is supported unchang
 (`maximumEntries`, `maximumNumberOfDays`, `timeFormat`, `customEvents`, `colored*` options,
 per-calendar `color`/`symbol`/`auth`, etc.). See the
 [MagicMirror² calendar docs](https://docs.magicmirror.builders/modules/calendar.html) for the
-full list — none of that behavior has changed.
+full list. None of that behavior has changed.
 
 ### New formatting options
 
@@ -123,17 +123,9 @@ per-calendar `color`/`symbol`/`class` configuration). Nothing is written to the 
 - Two separate MagicMirror *processes* sharing this same `modules/` directory never affect each
   other's styling, since each process renders from its own in-memory config.
 
-## Running multiple MagicMirror instances from one shared `modules/` directory
-
-This works out of the box and required no changes here — each module instance's socket
-communication (`node_helper.js`) is already keyed by that instance's `identifier`, and the
-calendar fetcher cache is scoped per `identifier + url`. Separate MagicMirror processes never
-share memory, sockets, or a cache file, so there's no cross-instance or cross-process collision
-to worry about even when they all read from the same installed copy of this module.
-
 ## Multiple calendar blocks in one `config.js`
 
-This is also fully supported, as with the stock module.
+This is fully supported, as with the stock module.
 Just add multiple `{ module:
 "MMM-CustomCalendar", ... }` blocks, each with its own `config`.
 
