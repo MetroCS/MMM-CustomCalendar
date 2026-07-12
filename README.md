@@ -139,5 +139,18 @@ Just add multiple `{ module:
 
 ## License
 
-MIT — see [`LICENSE`](./LICENSE). Retains the original MagicMirror² copyright notice as required,
-with a new copyright line for this derivative work.
+MIT — see [`LICENSE`](./LICENSE)  
+Retains the original MagicMirror² copyright notice with a new copyright line for this derivative work.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the [GNU General Public License](LICENSE) as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
