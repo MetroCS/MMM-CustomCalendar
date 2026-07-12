@@ -25,7 +25,7 @@ to stay in lockstep with upstream changes.
 cd ~/MagicMirror/modules
 git clone https://github.com/<your-org>/MMM-CustomCalendar.git
 cd MMM-CustomCalendar
-npm install
+npm install --omit=dev
 ```
 
 Then add the module information to `config.js` like any other module:
