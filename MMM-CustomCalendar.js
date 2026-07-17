@@ -325,7 +325,7 @@ Module.register("MMM-CustomCalendar", {
 			const eventWrapper = document.createElement("tr");
 
 			if (this.config.coloredText) {
-				eventWrapper.style.cssText = `color:${this.colorForUrl(event.url, false)}`;
+				eventWrapper.style.color = this.colorForUrl(event.url, false);
 			}
 
 			if (this.config.coloredBackground) {
@@ -350,7 +350,7 @@ Module.register("MMM-CustomCalendar", {
 
 			if (this.config.displaySymbol) {
 				if (this.config.coloredSymbol) {
-					symbolWrapper.style.cssText = `color:${this.colorForUrl(event.url, false)}`;
+					symbolWrapper.style.color = this.colorForUrl(event.url, false);
 				}
 
 				const symbolClass = this.symbolClassForUrl(event.url);
@@ -401,11 +401,11 @@ Module.register("MMM-CustomCalendar", {
 						if (typeof this.config.customEvents[ev].color !== "undefined" && this.config.customEvents[ev].color !== "") {
 							// Respect parameter ColoredSymbolOnly also for custom events
 							if (this.config.coloredText) {
-								eventWrapper.style.cssText = `color:${this.config.customEvents[ev].color}`;
-								titleWrapper.style.cssText = `color:${this.config.customEvents[ev].color}`;
+								eventWrapper.style.color = this.config.customEvents[ev].color;
+								titleWrapper.style.color = this.config.customEvents[ev].color;
 							}
 							if (this.config.displaySymbol && this.config.coloredSymbol) {
-								symbolWrapper.style.cssText = `color:${this.config.customEvents[ev].color}`;
+								symbolWrapper.style.color = this.config.customEvents[ev].color;
 							}
 						}
 						if (typeof this.config.customEvents[ev].eventClass !== "undefined" && this.config.customEvents[ev].eventClass !== "") {
@@ -471,7 +471,7 @@ Module.register("MMM-CustomCalendar", {
 					}
 
 					if (this.config.coloredText) {
-						locationRow.style.cssText = `color:${this.colorForUrl(event.url, false)}`;
+						locationRow.style.color = this.colorForUrl(event.url, false);
 					}
 
 					if (this.config.coloredBackground) {
@@ -1037,18 +1037,43 @@ Module.register("MMM-CustomCalendar", {
 
 	/**
 	 * MMM-CustomCalendar addition.
-	 * Resolves a formatting property (fontSize, titleFontSize, timeFontSize,
-	 * symbolFontSize, lineHeight, symbolTitleSpace, titleDateSpace) for a specific
-	 * calendar url, following the same override chain used elsewhere in this module:
-	 * per-calendar config value -> instance-level module config value -> undefined
-	 * (which leaves the stylesheet's own default untouched).
-	 * @param {string} url The calendar url
+	 * Resolves a formatting property for a specific calendar URL.
+	 *
+	 * Font properties use this fallback order:
+	 * per-calendar specific font -> per-calendar fontSize -> instance-specific font
+	 * -> instance fontSize -> stylesheet default.
+	 *
+	 * Non-font properties use:
+	 * per-calendar value -> instance value -> stylesheet default.
+	 *
+	 * Null, undefined, and empty-string values are treated as unset so they do not
+	 * prevent fallback to the next configured value.
+	 * @param {string} url The calendar URL
 	 * @param {string} property The formatting property to look for
-	 * @returns {string|undefined} The resolved CSS value, or undefined if neither
-	 * the calendar nor the instance config set it.
+	 * @returns {string|undefined} The resolved CSS value, or undefined when unset
 	 */
 	styleForUrl (url, property) {
-		return this.getCalendarProperty(url, property, this.config[property]);
+		const calendar = this.config.calendars.find((entry) => entry.url === url);
+		const hasStyleValue = (value) => value !== null && value !== undefined && value !== "";
+		const fontProperties = new Set(["fontSize", "titleFontSize", "timeFontSize", "symbolFontSize"]);
+
+		if (calendar && hasStyleValue(calendar[property])) {
+			return calendar[property];
+		}
+
+		if (property !== "fontSize" && fontProperties.has(property) && calendar && hasStyleValue(calendar.fontSize)) {
+			return calendar.fontSize;
+		}
+
+		if (hasStyleValue(this.config[property])) {
+			return this.config[property];
+		}
+
+		if (property !== "fontSize" && fontProperties.has(property) && hasStyleValue(this.config.fontSize)) {
+			return this.config.fontSize;
+		}
+
+		return undefined;
 	},
 
 	/**
