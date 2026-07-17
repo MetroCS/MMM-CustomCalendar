@@ -1052,29 +1052,60 @@ Module.register("MMM-CustomCalendar", {
 	 * @param {string} property The formatting property to look for
 	 * @returns {string|undefined} The resolved CSS value, or undefined when unset
 	 */
-	styleForUrl (url, property) {
-		const calendar = this.config.calendars.find((entry) => entry.url === url);
-		const hasStyleValue = (value) => value !== null && value !== undefined && value !== "";
-		const fontProperties = new Set(["fontSize", "titleFontSize", "timeFontSize", "symbolFontSize"]);
+    styleForUrl (url, property) {
+	const calendar = this.config.calendars.find((entry) => entry.url === url);
+	const hasStyleValue = (value) =>
+	      value !== null &&
+	      value !== undefined &&
+	      value !== "";
 
-		if (calendar && hasStyleValue(calendar[property])) {
-			return calendar[property];
-		}
+	const fontProperties = new Set([
+	    "fontSize",
+	    "titleFontSize",
+	    "timeFontSize",
+	    "symbolFontSize"
+	]);
 
-		if (property !== "fontSize" && fontProperties.has(property) && calendar && hasStyleValue(calendar.fontSize)) {
-			return calendar.fontSize;
-		}
+	if (calendar && hasStyleValue(calendar[property])) {
+	    return calendar[property];
+	}
 
-		if (hasStyleValue(this.config[property])) {
-			return this.config[property];
-		}
+	if (
+	    property !== "fontSize" &&
+		fontProperties.has(property) &&
+		calendar &&
+		hasStyleValue(calendar.fontSize)
+	) {
+	    return calendar.fontSize;
+	}
 
-		if (property !== "fontSize" && fontProperties.has(property) && hasStyleValue(this.config.fontSize)) {
-			return this.config.fontSize;
-		}
+	/*
+	 * Unless a calendar supplies its own timeFontSize or general
+	 * fontSize, make its event date/time match its title size.
+	 */
+	if (
+	    property === "timeFontSize" &&
+		calendar &&
+		hasStyleValue(calendar.titleFontSize)
+	) {
+	    return calendar.titleFontSize;
+	}
 
-		return undefined;
-	},
+	if (hasStyleValue(this.config[property])) {
+	    return this.config[property];
+	}
+
+	if (
+	    property !== "fontSize" &&
+		fontProperties.has(property) &&
+		hasStyleValue(this.config.fontSize)
+	) {
+	    return this.config.fontSize;
+	}
+
+	return undefined;
+    },
+
 
 	/**
 	 * MMM-CustomCalendar addition.
