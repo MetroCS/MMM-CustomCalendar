@@ -267,38 +267,59 @@ Module.register("MMM-CustomCalendar", {
 		}
 
 		let lastSeenDate = "";
+		let lastSeenCalendarUrl = "";
+		let lastSeenTimeFontSize;
 
 		events.forEach((event, index) => {
 			const eventStartDateMoment = this.timestampToMoment(event.startDate);
 			const eventEndDateMoment = this.timestampToMoment(event.endDate);
 			const dateAsString = eventStartDateMoment.format(this.config.dateFormat);
+			const resolvedTimeFontSize = this.styleForUrl(event.url, "timeFontSize");
+
 			if (this.config.timeFormat === "dateheaders") {
-				if (lastSeenDate !== dateAsString) {
-					const dateRow = document.createElement("tr");
-					dateRow.className = "dateheader normal";
-					if (event.today) dateRow.className += " today";
-					else if (event.dayBeforeYesterday) dateRow.className += " dayBeforeYesterday";
-					else if (event.yesterday) dateRow.className += " yesterday";
-					else if (event.tomorrow) dateRow.className += " tomorrow";
-					else if (event.dayAfterTomorrow) dateRow.className += " dayAfterTomorrow";
+    			const dateHeaderChanged =
+        			lastSeenDate !== dateAsString ||
+			        lastSeenCalendarUrl !== event.url ||
+        			lastSeenTimeFontSize !== resolvedTimeFontSize;
+
+			    if (dateHeaderChanged) {
+        			const dateRow = document.createElement("tr");
+        			dateRow.className = "dateheader normal";
+
+			        if (event.today) dateRow.className += " today";
+        			else if (event.dayBeforeYesterday) dateRow.className += " dayBeforeYesterday";
+        			else if (event.yesterday) dateRow.className += " yesterday";
+    			    else if (event.tomorrow) dateRow.className += " tomorrow";
+			        else if (event.dayAfterTomorrow) dateRow.className += " dayAfterTomorrow";
 
 					const dateCell = document.createElement("td");
-					dateCell.colSpan = "3";
-					dateCell.innerHTML = dateAsString;
-					dateCell.style.paddingTop = "10px";
-					this.setStyleIfDefined(dateRow, "fontSize", this.styleForUrl(event.url, "timeFontSize"));
-					this.setStyleIfDefined(dateRow, "lineHeight", this.styleForUrl(event.url, "lineHeight"));
-					dateRow.appendChild(dateCell);
-					wrapper.appendChild(dateRow);
+			        dateCell.colSpan = "3";
+			        dateCell.innerHTML = dateAsString;
+			        dateCell.style.paddingTop = "10px";
 
-					if (this.config.fade && index >= startFade) {
-						//fading
-						currentFadeStep = index - startFade;
-						dateRow.style.opacity = 1 - (1 / fadeSteps) * currentFadeStep;
-					}
+			        this.setStyleIfDefined(
+			            dateRow,
+			            "fontSize",
+			            resolvedTimeFontSize
+			        );
+			        this.setStyleIfDefined(
+			            dateRow,
+			            "lineHeight",
+			            this.styleForUrl(event.url, "lineHeight")
+			        );
 
-					lastSeenDate = dateAsString;
-				}
+			        dateRow.appendChild(dateCell);
+			        wrapper.appendChild(dateRow);
+
+			        if (this.config.fade && index >= startFade) {
+			            currentFadeStep = index - startFade;
+			            dateRow.style.opacity = 1 - (1 / fadeSteps) * currentFadeStep;
+			        }
+
+			        lastSeenDate = dateAsString;
+			        lastSeenCalendarUrl = event.url;
+			        lastSeenTimeFontSize = resolvedTimeFontSize;
+			    }
 			}
 
 			const eventWrapper = document.createElement("tr");
