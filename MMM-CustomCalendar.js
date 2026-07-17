@@ -286,7 +286,7 @@ Module.register("MMM-CustomCalendar", {
 					dateCell.colSpan = "3";
 					dateCell.innerHTML = dateAsString;
 					dateCell.style.paddingTop = "10px";
-					this.setStyleIfDefined(dateRow, "fontSize", this.styleForUrl(event.url, "fontSize"));
+					this.setStyleIfDefined(dateRow, "fontSize", this.styleForUrl(event.url, "timeFontSize"));
 					this.setStyleIfDefined(dateRow, "lineHeight", this.styleForUrl(event.url, "lineHeight"));
 					dateRow.appendChild(dateCell);
 					wrapper.appendChild(dateRow);
